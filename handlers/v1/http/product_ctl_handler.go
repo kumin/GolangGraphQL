@@ -34,9 +34,9 @@ func (p *ProductCtlHandler) CreateProduct(ctx *gin.Context) {
 }
 
 func (p *ProductCtlHandler) ListProducts(ctx *gin.Context) {
-	page, _ := strconv.ParseInt(ctx.Params.ByName("page"))
-	limit, _ := strconv.ParseInt(ctx.Params.ByName("limit"))
-	prods, err := p.productRepo.ListProducts(ctx.Context(), page, limit)
+	page, _ := strconv.ParseInt(ctx.Params.ByName("page"), 10, 32)
+	limit, _ := strconv.ParseInt(ctx.Params.ByName("limit"), 10, 32)
+	prods, err := p.productRepo.ListProducts(ctx, int(page), int(limit))
 	if err != nil {
 		return
 	}
