@@ -30,17 +30,12 @@ func (p *ProductMysqlRepo) CreateProduct(
 		if err := tx.WithContext(ctx).Create(prod).Error; err != nil {
 			return err
 		}
-
-		if err := tx.WithContext(ctx).Create(prod.Properties).Error; err != nil {
-			return err
-		}
-
 		return nil
 	}); err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	return prod, nil
 }
 
 func (p *ProductMysqlRepo) ListProducts(
@@ -57,7 +52,7 @@ func (p *ProductMysqlRepo) ListProducts(
 	}
 
 	for _, prod := range prods {
-		var properties *entities.Properties
+    var properties *entities.Properties
 		if err := p.db.WithContext(ctx).
 			Model(&entities.Properties{}).
 			Where("product_id = ?", prod.Id).

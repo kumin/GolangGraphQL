@@ -1,10 +1,11 @@
 package entities
 
 type Properties struct {
-	Id    uint32
-	Price float64
-	Color string
-	Size  string
+	Id        uint32 `gorm:"primaryKey"`
+	Price     float64
+	Color     string
+	Size      string
+	ProductId uint32
 }
 
 func (p *Properties) TableName() string {
@@ -12,7 +13,7 @@ func (p *Properties) TableName() string {
 }
 
 type Product struct {
-	Id         uint32
+	Id         uint32 `gorm:"primaryKey"`
 	Name       string
 	Sku        string
 	Properties *Properties

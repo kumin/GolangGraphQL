@@ -28,17 +28,18 @@ func (p *ProductCtlHandler) CreateProduct(ctx *gin.Context) {
 	}
 	prod, err := p.productRepo.CreateProduct(ctx, product)
 	if err != nil {
-		return
+		ctx.IndentedJSON(http.StatusInternalServerError, err)
 	}
 	ctx.IndentedJSON(http.StatusOK, prod)
 }
 
 func (p *ProductCtlHandler) ListProducts(ctx *gin.Context) {
-	page, _ := strconv.ParseInt(ctx.Params.ByName("page"), 10, 32)
-	limit, _ := strconv.ParseInt(ctx.Params.ByName("limit"), 10, 32)
+	page, _ := strconv.ParseInt(ctx.Query("page"), 10, 32)
+	limit, _ := strconv.ParseInt(ctx.Query("limit"), 10, 32)
 	prods, err := p.productRepo.ListProducts(ctx, int(page), int(limit))
 	if err != nil {
-		return
+		ctx.IndentedJSON(http.StatusInternalServerError, err)
 	}
+
 	ctx.IndentedJSON(http.StatusOK, prods)
 }
