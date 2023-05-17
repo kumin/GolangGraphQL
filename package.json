@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "graphql-schema-linter": "^3.0.1"
+  },
+  "graphql-schema-linter": {}
+}

@@ -1,11 +1,11 @@
 package entities
 
 type Properties struct {
-	Id        uint32 `gorm:"primaryKey"`
-	Price     float64
-	Color     string
-	Size      string
-	ProductId uint32
+	ID        uint32  `json:"id,omitempty" gorm:"primaryKey"`
+	Price     float64 `json:"price,omitempty"`
+	Color     string  `json:"color,omitempty"`
+	Size      string  `json:"size,omitempty"`
+	ProductId uint32  `json:"product_id,omitempty"`
 }
 
 func (p *Properties) TableName() string {
@@ -13,10 +13,10 @@ func (p *Properties) TableName() string {
 }
 
 type Product struct {
-	Id         uint32 `gorm:"primaryKey"`
-	Name       string
-	Sku        string
-	Properties *Properties
+	ID         uint32      `json:"id,omitempty" gorm:"primaryKey"`
+	Name       string      `json:"name,omitempty"`
+	Sku        string      `json:"sku,omitempty"`
+	Properties *Properties `json:"properties,omitempty"`
 }
 
 func (p *Product) TableName() string {

@@ -8,49 +8,63 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kumin/GolangGraphQL/entities"
 	"github.com/kumin/GolangGraphQL/graph/model"
 )
 
-// CreateLink is the resolver for the createLink field.
-func (r *mutationResolver) CreateLink(ctx context.Context, input model.NewLink) (*model.Link, error) {
-	panic(fmt.Errorf("not implemented: CreateLink - createLink"))
-}
-
-// CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (string, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
-}
-
-// Login is the resolver for the login field.
-func (r *mutationResolver) Login(ctx context.Context, input model.Login) (string, error) {
-	panic(fmt.Errorf("not implemented: Login - login"))
-}
-
-// RefreshToken is the resolver for the refreshToken field.
-func (r *mutationResolver) RefreshToken(ctx context.Context, input model.RefreshTokenInput) (string, error) {
-	panic(fmt.Errorf("not implemented: RefreshToken - refreshToken"))
-}
-
-// Links is the resolver for the links field.
-func (r *queryResolver) Links(ctx context.Context) ([]*model.Link, error) {
-	return []*model.Link{
-		{
-			Title:   "demo link",
-			Address: "demo.link.com.vn",
-			User: &model.User{
-				Name: "kumin",
-			},
+// CreateProduct is the resolver for the createProduct field.
+func (r *mutationResolver) CreateProduct(ctx context.Context, input model.NewProduct) (*entities.Product, error) {
+	prod := &entities.Product{
+		Name: input.Name,
+		Sku:  input.Sku,
+		Properties: &entities.Properties{
+			Price: input.Properties.Price,
+			Color: *input.Properties.Color,
+			Size:  *input.Properties.Size,
 		},
-	}, nil
+	}
+	return r.ProductRepo.CreateProduct(ctx, prod)
+}
+
+// ID is the resolver for the id field.
+func (r *productResolver) ID(ctx context.Context, obj *entities.Product) (*int, error) {
+	id := int(obj.ID)
+	return &id, nil
+}
+
+// ID is the resolver for the id field.
+func (r *propertiesResolver) ID(ctx context.Context, obj *entities.Properties) (*int, error) {
+	panic(fmt.Errorf("not implemented: ID - id"))
+}
+
+// ProductID is the resolver for the product_id field.
+func (r *propertiesResolver) ProductID(ctx context.Context, obj *entities.Properties) (int, error) {
+	panic(fmt.Errorf("not implemented: ProductID - product_id"))
+}
+
+// Products is the resolver for the products field.
+func (r *queryResolver) Products(ctx context.Context) ([]*entities.Product, error) {
+	return r.ProductRepo.AllProducts(ctx)
+}
+
+// Filter is the resolver for the filter field.
+func (r *queryResolver) Filter(ctx context.Context, page int, limit int) ([]*entities.Product, error) {
+	return r.ProductRepo.ListProducts(ctx, page, limit)
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Product returns ProductResolver implementation.
+func (r *Resolver) Product() ProductResolver { return &productResolver{r} }
+
+// Properties returns PropertiesResolver implementation.
+func (r *Resolver) Properties() PropertiesResolver { return &propertiesResolver{r} }
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-type (
-	mutationResolver struct{ *Resolver }
-	queryResolver    struct{ *Resolver }
-)
+type mutationResolver struct{ *Resolver }
+type productResolver struct{ *Resolver }
+type propertiesResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }

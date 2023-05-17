@@ -1,45 +1,32 @@
-# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-type Link {
-  id: ID!
-  title: String!
-  address: String!
-  user: User!
+type Properties {
+  id: Int
+  price: Float!
+  color: String
+  size: String
+  product_id: Int!
 }
-
-type User {
-  id: ID!
+type Product {
+  id: Int
   name: String!
+  sku: String!
+  properties: Properties
 }
 
 type Query {
-  links: [Link!]!
+  products: [Product]!
+  filter(page: Int!, limit: Int!): [Product]!
 }
 
-input NewLink {
-  title: String!
-  address: String!
+input NewProperties {
+  price: Float!
+  color: String
+  size: String
 }
-
-input RefreshTokenInput{
-  token: String!
+input NewProduct {
+  name: String!
+  sku: String!
+  properties: NewProperties!
 }
-
-input NewUser {
-  username: String!
-  password: String!
-}
-
-input Login {
-  username: String!
-  password: String!
-}
-
 type Mutation {
-  createLink(input: NewLink!): Link!
-  createUser(input: NewUser!): String!
-  login(input: Login!): String!
-  # we'll talk about this in authentication section
-  refreshToken(input: RefreshTokenInput!): String!
+  createProduct(input: NewProduct!): Product!
 }

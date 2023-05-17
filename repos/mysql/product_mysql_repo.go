@@ -46,20 +46,25 @@ func (p *ProductMysqlRepo) ListProducts(
 	var prods []*entities.Product
 	if err := p.db.WithContext(ctx).
 		Model(&entities.Product{}).
+		Joins("Properties").
 		Offset(offset).
-		Limit(limit).Find(&prods).Error; err != nil {
+		Limit(limit).
+		Find(&prods).Error; err != nil {
 		return nil, err
 	}
 
-	for _, prod := range prods {
-    var properties *entities.Properties
-		if err := p.db.WithContext(ctx).
-			Model(&entities.Properties{}).
-			Where("product_id = ?", prod.Id).
-			Find(&properties).Error; err != nil {
-			return nil, err
-		}
-		prod.Properties = properties
+	return prods, nil
+}
+
+func (p *ProductMysqlRepo) AllProducts(
+	ctx context.Context,
+) ([]*entities.Product, error) {
+	var prods []*entities.Product
+	if err := p.db.WithContext(ctx).
+		Model(&entities.Product{}).
+		Joins("Properties").
+		Scan(&prods).Error; err != nil {
+		return nil, err
 	}
 
 	return prods, nil
