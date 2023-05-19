@@ -38,7 +38,7 @@ func BuildConnection(configs *MysqlConfiguration) (*gorm.DB, error) {
 }
 
 func GetMysqlCfgs() *MysqlConfiguration {
-	URI := envx.GetString("MYSQL_ADDRS", "root:root@tcp(localhost:3306)/kumin_store?charset=utf8&parseTime=True&loc=Local&multistatement=true")
+	URI := envx.GetString("MYSQL_ADDRS", "root@tcp(localhost:3306)/kumin_store?charset=utf8&parseTime=True&loc=Local&multiStatements=true")
 	MaxConns := envx.GetInt("MAX_CONNECTIONS", 10)
 	MaxIdleConnection := envx.GetInt("MAX_IDLECONNECTIONS", 10)
 
